@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:15.1-alpine
+    container_name: db_app
+    # ports: 
+    #   - "5437:5432"
+    command: -p 1221
+    expose: 
+      - 1221
+    env_file: 
+      - .env
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.main
+    env_file: 
+      - .env
+    container_name: fastapi_app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db

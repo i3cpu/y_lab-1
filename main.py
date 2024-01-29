@@ -159,7 +159,8 @@ def delete_submenu(api_test_menu_id: str, api_test_submenu_id:str):
 @app.get("/api/v1/menus/{api_test_menu_id}/submenus/{api_test_submenu_id}/dishes")
 def get_dishes(api_test_menu_id: str, api_test_submenu_id: str ):
     session = Session()
-    dish = session.query(Dish).filter(Dish.submenu_id == api_test_submenu_id, Submenu.menu_id==api_test_menu_id).all()
+    # dish = session.query(Dish).filter(Dish.submenu_id == api_test_submenu_id, Submenu.menu_id==api_test_menu_id).all()
+    dish = session.query(Dish).join(Submenu).filter(Dish.submenu_id == Submenu.id, Submenu.menu_id == api_test_menu_id).all()
     return dish
 
 @app.post("/api/v1/menus/{api_test_menu_id}/submenus/{api_test_submenu_id}/dishes", status_code=201)

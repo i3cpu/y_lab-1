@@ -10,8 +10,8 @@ class Menu(Base):
     id = Column(String, primary_key=True, default=str(uuid.uuid4()), index=True)
     title = Column(String(255))
     description = Column(String(255))
-    submenus_count = Column(Integer, default=0)
-    dishes_count = Column(Integer, default=0)
+    submenus_count = Column(Integer)
+    dishes_count = Column(Integer)
     submenus = relationship("Submenu", backref="menu", cascade="all, delete-orphan")
 
 
@@ -36,7 +36,8 @@ class Dish(Base):
     submenu_id = Column(String, ForeignKey('submenu.id'))
 
 
-# очистка бд
+# # очистка бд
+
 Base.metadata.drop_all(engine)
 # создание таблиц в бд
 Base.metadata.create_all(engine)
