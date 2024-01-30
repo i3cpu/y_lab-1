@@ -29,7 +29,8 @@ def create_menu(menu: MenuCreate):
         "submenus_count": menu.submenus_count,
         "dishes_count": menu.dishes_count
     }
- 
+
+
 @app.get("/api/v1/menus/{api_test_menu_id}")
 def get_menu_by_id(api_test_menu_id: str):
     session = Session()
@@ -37,6 +38,16 @@ def get_menu_by_id(api_test_menu_id: str):
 
     if not menu:
         raise HTTPException(status_code=404, detail="menu not found")
+
+    # -- один тест постмана не проходит --
+    
+    # counts = session.query(
+    #     func.count(Submenu.id).label("submenus_count"),
+    #     func.count(Dish.id).label("dishes_count"),
+    # ).join(Submenu).filter(Submenu.menu_id == api_test_menu_id).first()
+
+    # submenus_count = counts.submenus_count
+    # dishes_count = counts.dishes_count
 
     submenus_count = session.query(func.count(Submenu.id)).filter(Submenu.menu_id == api_test_menu_id).scalar()
     dishes_count = session.query(func.count(Dish.id)).join(Submenu).filter(Submenu.menu_id == api_test_menu_id).scalar()

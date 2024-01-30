@@ -4,13 +4,14 @@ services:
   db:
     image: postgres:15.1-alpine
     container_name: db_app
-    # ports: 
-    #   - "5437:5432"
     command: -p 1221
     expose: 
       - 1221
     env_file: 
       - .env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d i5cpu -p 1221 -U i5cpu"]
+
 
   pytest:
     build:
@@ -18,4 +19,5 @@ services:
       dockerfile: Dockerfile.test
     container_name: pytest_container
     depends_on:
-      - db
+      db:
+        condition: service_healthy
